@@ -104,24 +104,23 @@
 
     </div>
 
-    <form action="">
+    <form name="submit-to-google-sheet">
 
         <div class="inputBox">
-            <input type="text" placeholder="your name">
-            <input type="number" placeholder="your number">
+            <input type="text" name="Name" placeholder="your name" required>
+            <input type="number" name="Number" placeholder="your number" required>
         </div>
 
         <div class="inputBox">
-            <input type="email" placeholder="your email">
-            <input type="text" placeholder="your subject">
+            <input type="email" name="Email" placeholder="your email" required>
+            <input type="text" name="Subject" placeholder="your subject" required>
         </div>
 
-        <textarea name="" placeholder="your message" id="" cols="30" rows="10"></textarea>
+        <textarea name="Message" placeholder="your message" id="" cols="30" rows="10" required></textarea>
 
         <input type="submit" value="send message" class="btn">
 
     </form>
-
 </div>
 
 </section>
@@ -129,6 +128,33 @@
 <!-- contact section ends -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script>
 
+    const scriptURL = 'https://sheet.best/api/sheets/e83b7a9a-e247-401e-8fb2-670804a735ca'
+//    const scriptURL = 'https://script.google.com/macros/s/AKfycbzggth6qv_Vs2LkmVWlcl0FIx-5RIUh8la5ru0cfDLVxbnzUbKAe_DsP7jXV6VgMWJD/exec'
+    const form = document.forms['submit-to-google-sheet'];
+  
+    form.addEventListener('submit', e => {
+      e.preventDefault()
+       // Get the current time
+    const currentTime = new Date().toLocaleString();
+     // Create a new FormData object and add the current time to it
+     const formData = new FormData(form);
+    formData.append('Time', currentTime);
+// console.log('FormData=>', formData)
+      fetch(scriptURL, { method: 'POST',  body: formData})
+        .then(response => {
+            // console.log(response)
+           if(response.ok){
+            alert("Message Sent Successfully!")
+            form.reset();
+           }else{
+            alert("Something went wrong!")
+           }
+        })
+        .catch(error => console.error('Error!', error.message))
+    })
+
+</script>
 </body>
 </html>
